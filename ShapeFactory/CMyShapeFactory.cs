@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using StorageClassLibrary;
-using System.Drawing;
+﻿using System.Drawing;
+using _CShapeFactory;
+using _Shapes;
+using _CShape;
 
-namespace _6th_LAB_OOP
+namespace _CMyShapeFactory
 {
-    public abstract class CShapeFactory // Абстрактная фабрика для фигур
-    {
-        public abstract CShape createShape(char code);
-        ~CShapeFactory() { }
-    }
-
     public class CMyShapeFactory : CShapeFactory // Вполне конкретная фабрика для CCircle, CTriangle, CSquare и CGroup
     {
         public override CShape createShape(char code)

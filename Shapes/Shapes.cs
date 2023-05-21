@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using StorageClassLibrary;
-using System.ComponentModel;
-using System.Data;
-using System.Windows.Forms;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
+using _CShape;
+using _Designer;
+using _List;
+using _CShapeFactory;
 
-namespace _6th_LAB_OOP
+namespace _Shapes
 {
     public class CCircle : CShape
     {
@@ -283,9 +278,11 @@ namespace _6th_LAB_OOP
         public override void Move(int dx, int dy)
         {
             if (CanChange(dx, dy, 0))
+            {
                 for (int i = 0; i < shapes.GetSize(); i++)
                     shapes.Get(i).Move(dx, dy);
-            observable.NotifyObservers(dx, dy);
+                observable.NotifyObservers(dx, dy);
+            }
         }
 
         public override bool WasClicked(int x, int y)

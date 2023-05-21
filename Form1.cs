@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using StorageClassLibrary;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using _List;
+using _MyList;
+using _Designer;
+using _CShapeFactory;
+using _CMyShapeFactory;
+using _TreeProcessor;
+using _CShape;
+using _Shapes;
 
 namespace _6th_LAB_OOP
 {
@@ -36,8 +37,8 @@ namespace _6th_LAB_OOP
 
             tree_processor = new TreeProcessor("Form1", nodeTreeView);
 
-            tree_processor.AddObservable(shapes); // Так скажем, взаимное наблюдение
-            shapes.AddObservable(tree_processor);
+            tree_processor.AddObserver(shapes); // Так скажем, взаимное наблюдение
+            shapes.AddObserver(tree_processor);
 
             this.MouseWheel += new MouseEventHandler(this_MouseWheel); // Изменение размера фигуры вращением колёсика
             this.MouseWheel += new MouseEventHandler(shapesComboBox_MouseWheel); // Запрещаем управление comboBox с помощью колеса
@@ -257,6 +258,7 @@ namespace _6th_LAB_OOP
             if (!group.isEmpty())
                 shapes.Add(group);
 
+            group.Select();
             RefreshWindow();
         }
 

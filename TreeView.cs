@@ -1,15 +1,14 @@
-﻿using StorageClassLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Reflection;
-using System.Diagnostics.Eventing.Reader;
+using _IObservable;
+using _IObserver;
+using _MyList;
+using _CShape;
+using _Shapes;
 
-namespace _6th_LAB_OOP
+namespace _TreeProcessor
 {
     public class TreeProcessor : IObservable, IObserver
     {
@@ -23,7 +22,7 @@ namespace _6th_LAB_OOP
             observers = new List<IObserver>();
         }
 
-        public void AddObservable(IObserver observer)
+        public void AddObserver(IObserver observer)
         {
             observers.Add(observer);
         }

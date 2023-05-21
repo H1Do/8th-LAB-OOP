@@ -1,14 +1,8 @@
-﻿using StorageClassLibrary;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using _List;
 
-namespace _6th_LAB_OOP
+namespace _Designer
 {
     public class Designer // Класс, отвечающий за отрисовку и получения изображения в bitmap (растровое изображение)
     {

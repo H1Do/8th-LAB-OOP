@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
+using _List;
+using _IObservable;
+using _IObserver;
+using _TreeProcessor;
+using _CShape;
+using _CShapeFactory;
 
-namespace _6th_LAB_OOP
+namespace _MyList
 {
     public class MyList : List, IObserver, IObservable
     {
@@ -18,7 +19,7 @@ namespace _6th_LAB_OOP
             observers = new List<IObserver>();
         }
 
-        public void AddObservable(IObserver observer)
+        public void AddObserver(IObserver observer)
         {
             observers.Add(observer);
         }
