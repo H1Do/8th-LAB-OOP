@@ -18,7 +18,6 @@ namespace _6th_LAB_OOP
         private MyList shapes;
         private Designer designer;
         private CShapeFactory shapeFactory;
-        private Observervable observervable;
         private TreeProcessor tree_processor;
 
         private Color current_color;
@@ -26,6 +25,7 @@ namespace _6th_LAB_OOP
         private String file_name = "";
 
         private bool is_ctrl_pressed = false;
+        private bool is_shape_linking = false;
 
         public Form1()
         {
@@ -33,12 +33,15 @@ namespace _6th_LAB_OOP
             shapes = new MyList();
             designer = new Designer(pictureBox.Width, pictureBox.Height);
             shapeFactory = new CMyShapeFactory();
-            observervable = new Observervable();
+
             tree_processor = new TreeProcessor("Form1", nodeTreeView);
+
+            tree_processor.AddObservable(shapes); // Так скажем, взаимное наблюдение
+            shapes.AddObservable(tree_processor);
 
             this.MouseWheel += new MouseEventHandler(this_MouseWheel); // Изменение размера фигуры вращением колёсика
             this.MouseWheel += new MouseEventHandler(shapesComboBox_MouseWheel); // Запрещаем управление comboBox с помощью колеса
-            shapesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList; // Запрещаем ввод своих значений в combobox
+            shapesComboBox.DropDownStyle = ComboBoxStyle.DropDownList; // Запрещаем ввод своих значений в combobox
         }
 
         private void Form1_MouseWheel(object sender, MouseEventArgs e)
@@ -48,13 +51,13 @@ namespace _6th_LAB_OOP
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            designer.DrawAll(shapes, designer);
+            designer.DrawAll(shapes);
         }
 
         private void RefreshWindow()
         {
             designer.Clear(); // Очищаем изображение, отрисовываем все фигуры и передаём изобажение pictureBox'у
-            designer.DrawAll(shapes, designer);
+            designer.DrawAll(shapes);
             pictureBox.Image = designer.GetBitmap();
         }
 
@@ -64,7 +67,7 @@ namespace _6th_LAB_OOP
                 return;
 
             designer.UnselectAll(shapes);
-            designer.DrawAll(shapes, designer);
+            designer.DrawAll(shapes);
 
             CShape new_obj;
 
@@ -85,23 +88,44 @@ namespace _6th_LAB_OOP
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             designer.Clear();
-            bool was_clicked = false;
-
-            for (int i = 0; i < shapes.GetSize(); i++)
-                if (shapes.Get(i).WasClicked(e.X, e.Y))
-                {
-                    was_clicked = true;
-                    if (!is_ctrl_pressed)
-                        designer.UnselectAll(shapes);
-                    shapes.Get(i).Select();
-                }
-                        
-            if (!was_clicked)
+            if (is_shape_linking)
             {
-                NewShare(e.X, e.Y);
-                return;
+                is_shape_linking = false;
+                CShape observer_shape = null;
+                CShape observable_shape = null;
+                for (int i = 0; i < shapes.GetSize(); i++)
+                {
+                    if (shapes.Get(i).WasClicked(e.X, e.Y))
+                    {
+                        observer_shape = shapes.Get(i);
+                    }
+                    else if (shapes.Get(i).IsSelected())
+                    {
+                        observable_shape = shapes.Get(i);
+                    }
+                }
+                observer_shape.observers.AddObservable(observable_shape);
+                observable_shape.observable.AddObserver(observer_shape);
             }
+            else
+            {
+                bool was_clicked = false;
 
+                for (int i = 0; i < shapes.GetSize(); i++)
+                    if (shapes.Get(i).WasClicked(e.X, e.Y))
+                    {
+                        was_clicked = true;
+                        if (!is_ctrl_pressed)
+                            designer.UnselectAll(shapes);
+                        shapes.SelectShapeAt(i);
+                    }
+
+                if (!was_clicked)
+                {
+                    NewShare(e.X, e.Y);
+                    return;
+                }
+            }
             RefreshWindow();
         }
 
@@ -122,24 +146,23 @@ namespace _6th_LAB_OOP
                     for (int i = 0; i < order_to_delete.GetSize(); i++)
                         shapes.Remove(order_to_delete.Get(i));
                     break;
-                case Keys.S:
-                    if (file_name != "")
-                        saveBtn_Click(sender, e);
-                    break;
                 case Keys.V:
-                    if (file_name != "")
+                    if (file_name != "" && is_ctrl_pressed)
                         loadBtn_Click(sender, e);
                     break;
-                case Keys.Up: // Если это Up, то все выделенные фигуры движутся наверх
+                case Keys.W: // Если это W, то все выделенные фигуры движутся наверх
                     dx = 0; dy = -5;
                     break;
-                case Keys.Down: // Если это Down, то все выделенные фигуры движутся вниз
-                    dx = 0; dy = 5;
+                case Keys.S: // Если это S, то либо сохраняем полотно, либо выделенные фигуры движутся вниз
+                    if (file_name != "" && is_ctrl_pressed)
+                        saveBtn_Click(sender, e);
+                    else
+                        dx = 0; dy = 5;
                     break;
-                case Keys.Left: // Если это Left, то все выделенные фигуры движутся влево
+                case Keys.A: // Если это A, то все выделенные фигуры движутся влево
                     dx = -5; dy = 0;
                     break;
-                case Keys.Right: // Если это Right, то все выделенные фигуры движутся вправо
+                case Keys.D: // Если это D, то все выделенные фигуры движутся вправо
                     dx = 5; dy = 0;
                     break; 
             }
@@ -235,7 +258,6 @@ namespace _6th_LAB_OOP
                 shapes.Add(group);
 
             RefreshWindow();
-            ActiveControl = pictureBox;
         }
 
         private void ungroupBtn_Click(object sender, EventArgs e)
@@ -253,7 +275,6 @@ namespace _6th_LAB_OOP
                 shapes.Add(order_to_add.Get(i));
 
             RefreshWindow();
-            ActiveControl = pictureBox;
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -276,7 +297,7 @@ namespace _6th_LAB_OOP
 
             StreamReader stream = new StreamReader(file_name, false);
             shapes.LoadShapes(stream, shapeFactory);
-            stream.Close();
+            stream.Close(); // Оповещаем все наблюдателей 
 
             RefreshWindow();
         }
@@ -291,6 +312,20 @@ namespace _6th_LAB_OOP
                 saveBtn.Enabled = true;
             }
             openFileDialog.Dispose();
+        }
+
+        private void nodeTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action == TreeViewAction.ByMouse)
+            {
+                tree_processor.Select(e.Node, is_ctrl_pressed);
+            }
+            RefreshWindow();
+        }
+
+        private void shapeLinkingBtn_Click(object sender, EventArgs e)
+        {
+            is_shape_linking = true;
         }
     }
 }

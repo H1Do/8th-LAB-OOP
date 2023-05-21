@@ -1,7 +1,9 @@
 ﻿using StorageClassLibrary;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,10 +67,17 @@ namespace _6th_LAB_OOP
             brush.Dispose();
         }
 
-        public void DrawAll(List storage, Designer designer) // Отрисовать всех фигуры
+        public void DrawLine(float x0, float y0, float x, float y)
+        {
+            Pen pen = new Pen(Color.Black, 1.0f);
+            pen.CustomEndCap = new AdjustableArrowCap(6, 6, true);
+            g.DrawLine(pen, x0, y0, x, y);
+        }
+
+        public void DrawAll(List storage) // Отрисовать всех фигуры
         {
             for (int i = 0; i < storage.GetSize(); i++)
-                storage.Get(i).Draw(designer);
+                storage.Get(i).Draw(this);
         }
 
         public void UnselectAll(List storage) // Убираем подчеркивание со всех окружностей

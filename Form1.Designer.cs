@@ -39,6 +39,7 @@
             this.loadBtn = new System.Windows.Forms.Button();
             this.fileDialogBtn = new System.Windows.Forms.Button();
             this.nodeTreeView = new System.Windows.Forms.TreeView();
+            this.shapeLinkingBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -143,10 +144,22 @@
             this.nodeTreeView.Name = "nodeTreeView";
             this.nodeTreeView.Size = new System.Drawing.Size(161, 470);
             this.nodeTreeView.TabIndex = 11;
+            this.nodeTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.nodeTreeView_AfterSelect);
+            // 
+            // shapeLinkingBtn
+            // 
+            this.shapeLinkingBtn.Location = new System.Drawing.Point(588, 475);
+            this.shapeLinkingBtn.Name = "shapeLinkingBtn";
+            this.shapeLinkingBtn.Size = new System.Drawing.Size(161, 23);
+            this.shapeLinkingBtn.TabIndex = 12;
+            this.shapeLinkingBtn.Text = "Shape linking";
+            this.shapeLinkingBtn.UseVisualStyleBackColor = true;
+            this.shapeLinkingBtn.Click += new System.EventHandler(this.shapeLinkingBtn_Click);
             // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(752, 536);
+            this.Controls.Add(this.shapeLinkingBtn);
             this.Controls.Add(this.nodeTreeView);
             this.Controls.Add(this.fileDialogBtn);
             this.Controls.Add(this.loadBtn);
@@ -180,6 +193,7 @@
         private System.Windows.Forms.Button loadBtn;
         private System.Windows.Forms.Button fileDialogBtn;
         private System.Windows.Forms.TreeView nodeTreeView;
+        private System.Windows.Forms.Button shapeLinkingBtn;
     }
 }
 

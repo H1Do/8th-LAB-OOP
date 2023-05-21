@@ -12,12 +12,21 @@ namespace _6th_LAB_OOP
         protected int x, y;
         protected Color color;
         protected int height, width;
+        public ObservableShape observable;
+        public ObserverShape observers;
 
+        public CShape () 
+        { 
+            observable = new ObservableShape(); 
+            observers = new ObserverShape();
+        }
+        public virtual int getX() { return x; }
+        public virtual int getY() { return y; }
         public virtual void Select() { is_selected = true; }
         public virtual void Unselect() { is_selected = false; }
         public virtual bool IsSelected() { return is_selected; }
         public virtual void ChangeColor(Color color) { this.color = color; }
-        public virtual void Move(int dx, int dy) { if (CanChange(dx, dy, 0)) { x += dx; y += dy; } }
+        public virtual void Move(int dx, int dy) { if (CanChange(dx, dy, 0)) { x += dx; y += dy; observable.NotifyObservers(dx, dy);  } }
         public virtual void Load(StreamReader stream, CShapeFactory shapeFactory) {
             string line = stream.ReadLine();
             string temp_str = "";
@@ -82,7 +91,7 @@ namespace _6th_LAB_OOP
             count = 0;
         }
 
-        public void Add(CShape shape)
+        public virtual void Add(CShape shape)
         {
             Node newNode = new Node(shape);
 
@@ -100,7 +109,7 @@ namespace _6th_LAB_OOP
             count++;
         }
 
-        public void Remove(CShape shape)
+        public virtual void Remove(CShape shape)
         {
             Node current = head;
             Node previous = null;
@@ -137,7 +146,7 @@ namespace _6th_LAB_OOP
             }
         }
 
-        public void RemoveAt(int index)
+        public virtual void RemoveAt(int index)
         {
             if (index < 0 || index >= count)
             {
@@ -175,7 +184,7 @@ namespace _6th_LAB_OOP
             count--;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             head = null;
             tail = null;

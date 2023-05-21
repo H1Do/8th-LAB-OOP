@@ -28,6 +28,7 @@ namespace _6th_LAB_OOP
             this.width = designer.getWidth();
             this.height = designer.getHeight();
             designer.DrawCircle(x, y, length, is_selected, color);
+            observers.Changed(designer);
         }
 
         public override void ChangeSize(char type)
@@ -81,6 +82,7 @@ namespace _6th_LAB_OOP
             points[2].X = x + length; points[2].Y = y + length / 2;
 
             designer.DrawTriangle(points, is_selected, color);
+            observers.Changed(designer);
         }
 
         public override bool WasClicked(int x, int y)
@@ -164,6 +166,7 @@ namespace _6th_LAB_OOP
             points[1].Y = y + length / 2;
 
             designer.DrawSquare(points[0].X, points[0].Y, length, is_selected, color);
+            observers.Changed(designer);
         }
 
         public override void ChangeSize(char type)
@@ -230,8 +233,14 @@ namespace _6th_LAB_OOP
 
         public override void Draw(Designer designer)
         {
+            x = 0; y = 0;
             for (int i = 0; i < shapes.GetSize(); i++)
+            {
                 shapes.Get(i).Draw(designer);
+                x += shapes.Get(i).getX() / shapes.GetSize();
+                y += shapes.Get(i).getY() / shapes.GetSize();
+            }
+            observers.Changed(designer);
         }
 
         public override void Select()
@@ -276,6 +285,7 @@ namespace _6th_LAB_OOP
             if (CanChange(dx, dy, 0))
                 for (int i = 0; i < shapes.GetSize(); i++)
                     shapes.Get(i).Move(dx, dy);
+            observable.NotifyObservers(dx, dy);
         }
 
         public override bool WasClicked(int x, int y)

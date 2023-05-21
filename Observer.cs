@@ -8,29 +8,13 @@ namespace _6th_LAB_OOP
 {
     public interface IObserver
     {
-        void Update();
+        void onObjectChanged(IObservable observable);
     }
 
-    public class Observervable
+    public interface IObservable
     {
-        private List<IObserver> observers;
-
-        public void AddObserver(IObserver observer)
-        {
-            observers.Add(observer);
-        }
-
-        public void RemoveObserver(IObserver observer)
-        {
-            observers.Remove(observer);
-        }
-
-        public void NotifyObservers()
-        {
-            foreach (var observer in observers)
-            {
-                observer.Update();
-            }
-        }
+        void AddObservable(IObserver observer);
+        // void RemoveObservable(IObserver observer);
+        void NotifyObservers();
     }
 }
