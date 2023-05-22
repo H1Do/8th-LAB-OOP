@@ -71,14 +71,20 @@ namespace _TreeProcessor
             if (!is_multiply_selection)
                 ClearSelections();
 
-            if (selected_node == root_node) 
-                foreach (TreeNode node in tree_view.Nodes[0].Nodes) 
+            if (selected_node == root_node) // Выбор Form1 ноды
+            {
+                foreach (TreeNode node in tree_view.Nodes[0].Nodes)
                     node.BackColor = Color.Red;
+                selected_node.BackColor = Color.Empty;
+            }
+            else
+            {
+                while (selected_node.Parent != null && selected_node.Parent != root_node)
+                    selected_node = selected_node.Parent;
 
-            while (selected_node.Parent != null && selected_node.Parent != root_node)
-                selected_node = selected_node.Parent;
-
-            selected_node.BackColor = Color.Red;
+                selected_node.BackColor = Color.Red;
+            }
+            
             NotifyObservers();
         }
 
