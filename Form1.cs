@@ -252,13 +252,16 @@ namespace _6th_LAB_OOP
                     group.addShape(shapes.Get(i));
                 }
 
-            for (int i = 0; i < order_to_delete.GetSize(); i++)
-                shapes.Remove(order_to_delete.Get(i));
+            if (group.getSize() > 1)
+            {
+                for (int i = 0; i < order_to_delete.GetSize(); i++)
+                    shapes.Remove(order_to_delete.Get(i));
 
-            if (!group.isEmpty())
                 shapes.Add(group);
 
-            group.Select();
+                group.Select();
+            } 
+            
             RefreshWindow();
         }
 
